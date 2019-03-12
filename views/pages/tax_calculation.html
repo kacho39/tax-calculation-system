@@ -2,84 +2,87 @@
 <html>
 <head>
 	<title>Tax Calculation</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
 <body>
-	<label>Personal Income: </label>
-	<input id="personal-income" type="text" name="personal-income">
+	<div class="container">
+		<label>Personal Income: </label>
+		<input id="personal-income" type="text" name="personal-income">
 
-	<!-- <div onclick="calculate()">Enter</div> -->
-	<button id="enter-btn" onclick="calculate()">Enter</button>
-
-
-	<h3>MPF result</h3>
-	<p id="mpf-result"></p>
-
-<br><br>
-	<div class="blockTable"><table style="width: 60%; height: auto;" border="1" cellspacing="0" cellpadding="0">
-		<tbody>
-			<tr>
-				<th style="width: 25%;">&nbsp;</th>
-				<th style="text-align: center; width: 25%;">
-					<p><strong>Net chargeable Income</strong></p>
-				</th>
-				<th style="text-align: center; width: 25%;">
-					<p><strong>Rate</strong></p>
-				</th>
-				<th style="text-align: center; width: 25%;">
-					<p><strong>Tax</strong></p>
-				</th>
-			</tr>
-			<tr>
-				<th style="width: 25%;">&nbsp;</th>
-				<th style="text-align: center; width: 25%;">
-					<p>$</p>
-				</th>
-				<th style="text-align: center; width: 25%;">&nbsp;</th>
-				<th style="text-align: center; width: 25%;">
-					<p>$</p>
-				</th>
-			</tr>
-			<tr>
-				<td style="width: 25%;">On the First</td>
-				<td style="text-align: right; width: 25%;">40,000</td>
-				<td style="text-align: right; width: 25%;">2%</td>
-				<td style="text-align: right; width: 25%;">800</td>
-			</tr>
-			<tr>
-				<td style="width: 25%;">On the Next</td>
-				<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">40,000</span></td>
-				<td style="text-align: right; width: 25%;">7%</td>
-				<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">2,800</span></td>
-			</tr>
-			<tr>
-				<td style="width: 25%;">&nbsp;</td>
-				<td style="text-align: right; width: 25%;">80,000</td>
-				<td style="text-align: right; width: 25%;">&nbsp;</td>
-				<td style="text-align: right; width: 25%;">3,600</td>
-			</tr>
-			<tr>
-				<td style="width: 25%;">On the Next</td>
-				<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">40,000</span></td>
-				<td style="text-align: right; width: 25%;">12%</td>
-				<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">4,800</span></td>
-			</tr>
-			<tr>
-				<td style="width: 25%;">&nbsp;</td>
-				<td style="text-align: right; width: 25%;">120,000</td>
-				<td style="text-align: right; width: 25%;">&nbsp;</td>
-				<td style="text-align: right; width: 25%;">8,400</td>
-			</tr>
-			<tr>
-				<td style="width: 25%;">Remainder</td>
-				<td style="text-align: right; width: 25%;">&nbsp;</td>
-				<td style="text-align: right; width: 25%;">17%</td>
-				<td style="text-align: right; width: 25%;">&nbsp;</td>
-			</tr>
-		</tbody>
-	</table></div>
+		<!-- <div onclick="calculate()">Enter</div> -->
+		<button id="enter-btn" onclick="calculate()">Enter</button>
 
 
-
+		<h3>MPF result</h3>
+		<p id="mpf-result"></p>
+	<br><br>
+		<div class="blockTable"><table style="width: 60%; height: auto;" border="1" cellspacing="0" cellpadding="0">
+			<tbody>
+				<tr>
+					<th style="width: 25%;">&nbsp;</th>
+					<th style="text-align: center; width: 25%;">
+						<p><strong>Net chargeable Income</strong></p>
+					</th>
+					<th style="text-align: center; width: 25%;">
+						<p><strong>Rate</strong></p>
+					</th>
+					<th style="text-align: center; width: 25%;">
+						<p><strong>Tax</strong></p>
+					</th>
+				</tr>
+				<tr>
+					<th style="width: 25%;">&nbsp;</th>
+					<th style="text-align: center; width: 25%;">
+						<p>$</p>
+					</th>
+					<th style="text-align: center; width: 25%;">&nbsp;</th>
+					<th style="text-align: center; width: 25%;">
+						<p>$</p>
+					</th>
+				</tr>
+				<tr>
+					<td style="width: 25%;">On the First</td>
+					<td style="text-align: right; width: 25%;">40,000</td>
+					<td style="text-align: right; width: 25%;">2%</td>
+					<td style="text-align: right; width: 25%;">800</td>
+				</tr>
+				<tr>
+					<td style="width: 25%;">On the Next</td>
+					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">40,000</span></td>
+					<td style="text-align: right; width: 25%;">7%</td>
+					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">2,800</span></td>
+				</tr>
+				<tr>
+					<td style="width: 25%;">&nbsp;</td>
+					<td style="text-align: right; width: 25%;">80,000</td>
+					<td style="text-align: right; width: 25%;">&nbsp;</td>
+					<td style="text-align: right; width: 25%;">3,600</td>
+				</tr>
+				<tr>
+					<td style="width: 25%;">On the Next</td>
+					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">40,000</span></td>
+					<td style="text-align: right; width: 25%;">12%</td>
+					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">4,800</span></td>
+				</tr>
+				<tr>
+					<td style="width: 25%;">&nbsp;</td>
+					<td style="text-align: right; width: 25%;">120,000</td>
+					<td style="text-align: right; width: 25%;">&nbsp;</td>
+					<td style="text-align: right; width: 25%;">8,400</td>
+				</tr>
+				<tr>
+					<td style="width: 25%;">Remainder</td>
+					<td style="text-align: right; width: 25%;">&nbsp;</td>
+					<td style="text-align: right; width: 25%;">17%</td>
+					<td style="text-align: right; width: 25%;">&nbsp;</td>
+				</tr>
+			</tbody>
+		</table></div>
+	</div>
 </body>
 </html>
 
