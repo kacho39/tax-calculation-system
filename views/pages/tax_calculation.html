@@ -17,10 +17,10 @@
 
 		<br><br>
 
-		<label>Personal Income (Annual): </label>
+		<label>Personal Income (Annual): $</label>
 		<input id="personal-income" type="text" name="personal-income">
 		<br>
-		<label>Personal Allowance: </label>
+		<label>Personal Allowance: $</label>
 		<input id="personal-allowance" type="text" name="personal-allowance" value="132000" disabled>
 
 
@@ -142,7 +142,7 @@
 		} else if (personal_income <= 30000) {
 			return personal_income * 0.05 * 12
 		} else {
-			return 1500 * 12
+			return "$" + 1500 * 12
 		}
 	}
 
