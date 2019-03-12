@@ -8,7 +8,11 @@
 	<input id="personal-income" type="text" name="personal-income">
 
 	<!-- <div onclick="calculate()">Enter</div> -->
-	<button onclick="calculate()">Enter</button>
+	<button id="enter-btn" onclick="calculate()">Enter</button>
+
+
+	<h3>MPF result</h3>
+	<p id="mpf-result"></p>
 
 <br><br>
 	<div class="blockTable"><table style="width: 60%; height: auto;" border="1" cellspacing="0" cellpadding="0">
@@ -83,5 +87,33 @@
 	function calculate() {
 		var personal_income = document.getElementById('personal-income').value;
 		console.log(personal_income)
+
+		document.getElementById("mpf-result").innerHTML = calculateMPF(personal_income);
 	}
+
+	function calculateMPF(personal_income) {
+		if (personal_income < 7100) {
+			return 0
+		} else if (personal_income <= 30000) {
+			return personal_income * 0.05
+		} else {
+			return 1500
+		}
+	}
+
+
+
+
+	// Press enter will calculate
+	var input = document.getElementsByTagName("BODY")[0];
+
+	input.addEventListener("keyup", function(event) {
+	  // Number 13 is the "Enter" key on the keyboard
+	  if (event.keyCode === 13) {
+	    // Cancel the default action, if needed
+	    event.preventDefault();
+	    // Trigger the button element with a click
+	    document.getElementById("enter-btn").click();
+	  }
+	});
 </script>
