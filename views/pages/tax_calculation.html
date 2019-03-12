@@ -137,12 +137,13 @@
 	}
 
 	function calculateMPF(personal_income) {
-		if (personal_income < 7100) {
+		var monthly_income = personal_income / 12;
+		if (monthly_income < 7100) {
 			return 0 * 12
-		} else if (personal_income <= 30000) {
-			return personal_income * 0.05 * 12
+		} else if (monthly_income <= 30000) {
+			return monthly_income * 0.05 * 12
 		} else {
-			return "$" + 1500 * 12
+			return 1500 * 12
 		}
 	}
 
