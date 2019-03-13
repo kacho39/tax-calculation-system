@@ -64,13 +64,13 @@
 				<tr>
 					<td style="width: 25%;">On the First</td>
 					<td style="text-align: right; width: 25%;">50,000</td>
-					<td style="text-align: right; width: 25%;">2%</td>
+					<td style="text-align: right; width: 25%;" id="first">2%</td>
 					<td style="text-align: right; width: 25%;">1,000</td>
 				</tr>
 				<tr>
 					<td style="width: 25%;">On the Next</td>
 					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">50,000</span></td>
-					<td style="text-align: right; width: 25%;">6%</td>
+					<td style="text-align: right; width: 25%;" id="second">6%</td>
 					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">3,000</span></td>
 				</tr>
 				<tr>
@@ -82,7 +82,7 @@
 				<tr>
 					<td style="width: 25%;">On the Next</td>
 					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">50,000</span></td>
-					<td style="text-align: right; width: 25%;">10%</td>
+					<td style="text-align: right; width: 25%;" id="third">10%</td>
 					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">5,000</span></td>
 				</tr>
 				<tr>
@@ -94,7 +94,7 @@
 				<tr>
 					<td style="width: 25%;">On the Next</td>
 					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">50,000</span></td>
-					<td style="text-align: right; width: 25%;">14%</td>
+					<td style="text-align: right; width: 25%;" id="fourth">14%</td>
 					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">7,000</span></td>
 				</tr>
 				<tr>
@@ -106,7 +106,7 @@
 				<tr>
 					<td style="width: 25%;">Remainder</td>
 					<td style="text-align: right; width: 25%;">&nbsp;</td>
-					<td style="text-align: right; width: 25%;">17%</td>
+					<td style="text-align: right; width: 25%;" id="remaining">17%</td>
 					<td style="text-align: right; width: 25%;">&nbsp;</td>
 				</tr>
 			</tbody>
@@ -155,35 +155,56 @@
 	function calculateMPF(personal_income) {
 		var monthly_income = personal_income / 12;
 		if (monthly_income < 7100) {
+
 			return 0 * 12
 		} else if (monthly_income <= 30000) {
+
 			return monthly_income * 0.05 * 12
-		} else {
+		} 
+		else {
 			return 1500 * 12
 		}
 	}
 
 	function calculateTax(net_chargeable_income) {
-		console.log(net_chargeable_income);
+		// console.log(net_chargeable_income);
 
 		var tax = 0;
-		var remaining_income = net_chargeable_income;
-		var income_per_count = 50000;
-		var tax_rate = 0.02;
+	// 	var remaining_income = net_chargeable_income;
+	// 	var income_per_count = 50000;
+	// 	var tax_rate = 0.02;
 
-		// count how many round is needed
-		var cal_count = remaining_income / 50000;
-		console.log(cal_count);
+	// 	// count how many round is needed
+	// 	var cal_count = remaining_income / 50000;
+	// 	console.log(cal_count);
 
-		for (var i = 1; i <= cal_count; i++) {
-		  	tax += income_per_count * tax_rate;
-		  	tax_rate += 0.04;
-		  	remaining_income -= income_per_count;
-		  	console.log(tax);
+	// 	for (var i = 1; i <= cal_count; i++) {
+	// 	  	tax += income_per_count * tax_rate;
+	// 	  	tax_rate += 0.04;
+	// 	  	remaining_income -= income_per_count;
+	// 	  	console.log(tax);
+	// 	}
+	// 	tax += remaining_income * 0.17;
+	// 	return tax;
+	// }
+		var first = document.getElementById('first').innerText;
+		// console.log(test);
+		// console.log(first.length)
+		if (first.length <= 2) {
+			first = first.charAt(0)
+			console.log(first)
+		} else {
+			first = first.substring(0, first.length - 2);
+			// console.log(first)
 		}
-		tax += remaining_income * 0.17;
-		return tax;
-	}
+		first = first / 100;
+		console.log(first);
+		
+		if (net_chargeable_income <= 50000) {
+			tax = net_chargeable_income * first;
+		}
+		else if (net_chargeable_income <= 100000) 
+	};
 
 
 
