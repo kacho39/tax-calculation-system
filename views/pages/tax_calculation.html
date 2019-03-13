@@ -37,6 +37,9 @@
 			<br>
 			<label>Personal Allowance: $</label>
 			<input id="personal-allowance" type="number" name="personal-allowance" value="132000" disabled>
+			<br>
+			<label>Net Chargeable Income: $</label>
+			<input id="net-chargeable-income" type="number" name="net-chargeable-income" disabled>
 		</form>
 
 
@@ -50,7 +53,7 @@
 		<label>Tax: $</label>
 		<span id="final-tax"><strong> 0.00 </strong></span>
 
-		
+
 
 		<br><br>
 
@@ -207,6 +210,8 @@
 
 			var net_chargeable_income = personal_income - calculateMPF(personal_income) - personal_allowance;
 
+			document.getElementById("net-chargeable-income").value = net_chargeable_income.toFixed(2);
+
 			document.getElementById("final-tax").innerHTML = calculateTax(net_chargeable_income).toFixed(2);
 
 			// calculateTax(personal_income)
@@ -268,7 +273,7 @@
 	// };
 
 	function calculateTax(net_chargeable_income) {
-		console.log(net_chargeable_income);
+		// console.log(net_chargeable_income);
 
 		var tax = 0;
 		var remaining_income = (net_chargeable_income > 0 ? net_chargeable_income : 0);
@@ -277,13 +282,12 @@
 
 		// count how many round is needed
 		var cal_count = (remaining_income / 50000 > 4) ? 4 : remaining_income / 50000;
-		console.log(cal_count);
+		// console.log(cal_count);
 
 		for (var i = 1; i <= cal_count; i++) {
 			tax += income_per_count * tax_rate;
 			tax_rate += 0.04;
 			remaining_income -= income_per_count;
-			console.log(tax);
 			document.querySelector('#step-row-' + i + ' .net-chargeable-income').innerHTML = income_per_count;
 			document.querySelector('#step-row-' + i + ' .each-step-tax').innerHTML = tax;
 			// document.querySelector("#first-step-row").innerHTML = "Hello World!";
