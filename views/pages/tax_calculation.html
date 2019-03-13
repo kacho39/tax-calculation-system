@@ -33,8 +33,8 @@
 		<label>Annual MPF: </label>
 		<p id="mpf-result"></p>
 
-		<br><br>
-		<table style="width: 60%; height: auto;" border="1" cellspacing="0" cellpadding="0">
+		<!-- <br><br> -->
+		<table id = "tax" style="width: 60%; height: auto;" border="1" cellspacing="0" cellpadding="0">
 			<tbody>
 				<tr>
 					<th style="width: 25%;">&nbsp;</th>
@@ -112,7 +112,11 @@
 	</div>
 </body>
 </html>
-
+<style>
+	#tax td {
+		padding: 5px;
+	}
+</style>
 <script type="text/javascript">
 
 	var radios = document.querySelectorAll('input[type=radio][name="marital_status"]');
