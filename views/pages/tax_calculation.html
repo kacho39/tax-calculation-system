@@ -3,6 +3,16 @@
 <head>
 	<title>Tax Calculation</title>
 
+	<style type="text/css">
+		#result-tax-table {
+			width: 60%;
+			text-align: center;
+		}
+		#result-tax-table th {
+			width: 25%;
+		}
+	</style>
+
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -39,6 +49,49 @@
 		<h3>Result</h3>
 		<label>Tax: $</label>
 		<span id="final-tax"><strong> 0.00 </strong></span>
+
+		
+
+		<br><br>
+
+		<table id="result-tax-table" border="1">
+			<tr>
+				<th>Step</th>
+				<th>Net Chargeable Income</th> 
+				<th>Rate</th>
+				<th>Tax</th>
+			</tr>
+			<tr id="step-row-1">
+				<td>On the First</td>
+				<td class="net-chargeable-income"></td> 
+				<td>2%</td>
+				<td class="each-step-tax"></td>
+			</tr>
+			<tr id="step-row-2">
+				<td>On the Next</td>
+				<td class="net-chargeable-income"></td> 
+				<td>6%</td>
+				<td class="each-step-tax"></td>
+			</tr>
+			<tr id="step-row-3">
+				<td>On the Next</td>
+				<td class="net-chargeable-income"></td> 
+				<td>10%</td>
+				<td class="each-step-tax"></td>
+			</tr>
+			<tr id="step-row-4">
+				<td>On the Next</td>
+				<td class="net-chargeable-income"></td> 
+				<td>14%</td>
+				<td class="each-step-tax"></td>
+			</tr>
+			<tr id="step-row-last">
+				<td>Remainder</td>
+				<td class="net-chargeable-income"></td> 
+				<td>17%</td>
+				<td class="each-step-tax"></td>
+			</tr>
+		</table>
 
 		<br><br>
 		<div class="table-responsive">
@@ -174,45 +227,74 @@
 		}
 	}
 
+	// function calculateTax(net_chargeable_income) {
+	// 	// console.log(net_chargeable_income);
+
+	// 	var tax = 0;
+	// // 	var remaining_income = net_chargeable_income;
+	// // 	var income_per_count = 50000;
+	// // 	var tax_rate = 0.02;
+
+	// // 	// count how many round is needed
+	// // 	var cal_count = remaining_income / 50000;
+	// // 	console.log(cal_count);
+
+	// // 	for (var i = 1; i <= cal_count; i++) {
+	// // 	  	tax += income_per_count * tax_rate;
+	// // 	  	tax_rate += 0.04;
+	// // 	  	remaining_income -= income_per_count;
+	// // 	  	console.log(tax);
+	// // 	}
+	// // 	tax += remaining_income * 0.17;
+	// // 	return tax;
+	// // }
+	// 	var first = document.getElementById('first').innerText;
+	// 	// console.log(test);
+	// 	// console.log(first.length)
+	// 	if (first.length <= 2) {
+	// 		first = first.charAt(0)
+	// 		console.log(first)
+	// 	} else {
+	// 		first = first.substring(0, first.length - 2);
+	// 		// console.log(first)
+	// 	}
+	// 	first = first / 100;
+	// 	console.log(first);
+
+	// 	if (net_chargeable_income <= 50000) {
+	// 		tax = net_chargeable_income * first;
+	// 	}
+	// 	else if (net_chargeable_income <= 100000)
+	// };
+
 	function calculateTax(net_chargeable_income) {
-		// console.log(net_chargeable_income);
+		console.log(net_chargeable_income);
 
 		var tax = 0;
-	// 	var remaining_income = net_chargeable_income;
-	// 	var income_per_count = 50000;
-	// 	var tax_rate = 0.02;
+		var remaining_income = (net_chargeable_income > 0 ? net_chargeable_income : 0);
+		var income_per_count = 50000;
+		var tax_rate = 0.02;
 
-	// 	// count how many round is needed
-	// 	var cal_count = remaining_income / 50000;
-	// 	console.log(cal_count);
+		// count how many round is needed
+		var cal_count = (remaining_income / 50000 > 4) ? 4 : remaining_income / 50000;
+		console.log(cal_count);
 
-	// 	for (var i = 1; i <= cal_count; i++) {
-	// 	  	tax += income_per_count * tax_rate;
-	// 	  	tax_rate += 0.04;
-	// 	  	remaining_income -= income_per_count;
-	// 	  	console.log(tax);
-	// 	}
-	// 	tax += remaining_income * 0.17;
-	// 	return tax;
-	// }
-		var first = document.getElementById('first').innerText;
-		// console.log(test);
-		// console.log(first.length)
-		if (first.length <= 2) {
-			first = first.charAt(0)
-			console.log(first)
-		} else {
-			first = first.substring(0, first.length - 2);
-			// console.log(first)
+		for (var i = 1; i <= cal_count; i++) {
+			tax += income_per_count * tax_rate;
+			tax_rate += 0.04;
+			remaining_income -= income_per_count;
+			console.log(tax);
+			document.querySelector('#step-row-' + i + ' .net-chargeable-income').innerHTML = income_per_count;
+			document.querySelector('#step-row-' + i + ' .each-step-tax').innerHTML = tax;
+			// document.querySelector("#first-step-row").innerHTML = "Hello World!";
 		}
-		first = first / 100;
-		console.log(first);
 
-		if (net_chargeable_income <= 50000) {
-			tax = net_chargeable_income * first;
-		}
-		else if (net_chargeable_income <= 100000)
-	};
+		tax += remaining_income * 0.17;
+		document.querySelector('#step-row-last .net-chargeable-income').innerHTML = remaining_income;
+		document.querySelector('#step-row-last .each-step-tax').innerHTML = tax;
+
+		return tax;
+	}
 
 	// Clean input fields data
 	function resetAll() {
