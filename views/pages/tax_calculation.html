@@ -10,111 +10,110 @@
 </head>
 <body>
 	<div class="container">
-		<div style="height: 100px"></div> 
+		<div style="height: 100px"></div>
 		<label>Marital Status: </label>
 		<br>
 		<input type="radio" name="marital_status" value="single" checked> Single / Separated / Divorced / Widowed<br>
 		<input type="radio" name="marital_status" value="married"> Married<br>
 
 		<br><br>
-
-		<label>Personal Income (Annual): $</label>
-		<input id="personal-income" type="text" name="personal-income">
-		<br>
-		<label>MPF Contribution: $</label>
-		<input id="mpf-contribution" type="text" name="mpf-contribution" disabled>
-		<br>
-		<label>Personal Allowance: $</label>
-		<input id="personal-allowance" type="text" name="personal-allowance" value="132000" disabled>
+		<form id="input-form">
+			<label>Personal Income (Annual): $</label>
+			<input id="personal-income" type="number"  min="0" name="personal-income" oninput="validity.valid||(value='');">
+			<div id="income-alert" style="display: none; color: red;">* Income cannot be empty!</div>
+			<br>
+			<label>MPF Contribution: $</label>
+			<input id="mpf-contribution" type="number" name="mpf-contribution" disabled>
+			<br>
+			<label>Personal Allowance: $</label>
+			<input id="personal-allowance" type="number" name="personal-allowance" value="132000" disabled>
+		</form>
 
 
 
 		<br><br>
-		<button id="enter-btn" onclick="calculate()">Enter</button>
+		<button class="btn btn-primary" id="enter-btn" onclick="calculate()" data-toggle="tooltip" title="Calculate the input">Enter</button>
+		<button class="btn btn-secondary" onclick="resetAll()" data-toggle="tooltip" title="Clear input data">Reset All</button>
 
 		<hr>
 		<h3>Result</h3>
-		<label>Tax: </label>
-		<p id="final-tax"></p>
+		<label>Tax: $</label>
+		<span id="final-tax"><strong> 0.00 </strong></span>
 
 		<br><br>
-		<table style="width: 60%; height: auto;" border="1" cellspacing="0" cellpadding="0">
-			<tbody>
-				<tr>
-					<th style="width: 25%;">&nbsp;</th>
-					<th style="text-align: center; width: 25%;">
-						<p><strong>Net chargeable Income</strong></p>
-					</th>
-					<th style="text-align: center; width: 25%;">
-						<p><strong>Rate</strong></p>
-					</th>
-					<th style="text-align: center; width: 25%;">
-						<p><strong>Tax</strong></p>
-					</th>
-				</tr>
-				<tr>
-					<th style="width: 25%;">&nbsp;</th>
-					<th style="text-align: center; width: 25%;">
-						<p>$</p>
-					</th>
-					<th style="text-align: center; width: 25%;">&nbsp;</th>
-					<th style="text-align: center; width: 25%;">
-						<p>$</p>
-					</th>
-				</tr>
-				<tr>
-					<td style="width: 25%;">On the First</td>
-					<td style="text-align: right; width: 25%;">50,000</td>
-					<td style="text-align: right; width: 25%;">2%</td>
-					<td style="text-align: right; width: 25%;">1,000</td>
-				</tr>
-				<tr>
-					<td style="width: 25%;">On the Next</td>
-					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">50,000</span></td>
-					<td style="text-align: right; width: 25%;">6%</td>
-					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">3,000</span></td>
-				</tr>
-				<tr>
-					<td style="width: 25%;">&nbsp;</td>
-					<td style="text-align: right; width: 25%;">100,000</td>
-					<td style="text-align: right; width: 25%;">&nbsp;</td>
-					<td style="text-align: right; width: 25%;">4,000</td>
-				</tr>
-				<tr>
-					<td style="width: 25%;">On the Next</td>
-					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">50,000</span></td>
-					<td style="text-align: right; width: 25%;">10%</td>
-					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">5,000</span></td>
-				</tr>
-				<tr>
-					<td style="width: 25%;">&nbsp;</td>
-					<td style="text-align: right; width: 25%;">150,000</td>
-					<td style="text-align: right; width: 25%;">&nbsp;</td>
-					<td style="text-align: right; width: 25%;">9,000</td>
-				</tr>
-				<tr>
-					<td style="width: 25%;">On the Next</td>
-					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">50,000</span></td>
-					<td style="text-align: right; width: 25%;">14%</td>
-					<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">7,000</span></td>
-				</tr>
-				<tr>
-					<td style="width: 25%;">&nbsp;</td>
-					<td style="text-align: right; width: 25%;">200,000</td>
-					<td style="text-align: right; width: 25%;">&nbsp;</td>
-					<td style="text-align: right; width: 25%;">16,000</td>
-				</tr>
-				<tr>
-					<td style="width: 25%;">Remainder</td>
-					<td style="text-align: right; width: 25%;">&nbsp;</td>
-					<td style="text-align: right; width: 25%;">17%</td>
-					<td style="text-align: right; width: 25%;">&nbsp;</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="table-responsive">
+			<table class="table table-hover table-bordered">
+				<tbody>
+					<tr class="table-primary">
+						<th scope="col">&nbsp;</th>
+						<th scope="col">Net chargeable Income</th>
+						<th scope="col">Rate</th>
+						<th scope="col">Tax</th>
+					</tr>
+					<tr>
+						<th style="width: 25%;">&nbsp;</th>
+						<th style="text-align: center; width: 25%;">
+							<p>$</p>
+						</th>
+						<th style="text-align: center; width: 25%;">&nbsp;</th>
+						<th style="text-align: center; width: 25%;">
+							<p>$</p>
+						</th>
+					</tr>
+					<tr>
+						<td scope="row">On the First</td>
+						<td style="text-align: right; width: 25%;">50,000</td>
+						<td style="text-align: right; width: 25%;">2%</td>
+						<td style="text-align: right; width: 25%;">1,000</td>
+					</tr>
+					<tr>
+						<td scope="row">On the Next</td>
+						<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">50,000</span></td>
+						<td style="text-align: right; width: 25%;">6%</td>
+						<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">3,000</span></td>
+					</tr>
+					<tr>
+						<td scope="row">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">100,000</td>
+						<td style="text-align: right; width: 25%;">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">4,000</td>
+					</tr>
+					<tr>
+						<td scope="row">On the Next</td>
+						<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">50,000</span></td>
+						<td style="text-align: right; width: 25%;">10%</td>
+						<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">5,000</span></td>
+					</tr>
+					<tr>
+						<td scope="row">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">150,000</td>
+						<td style="text-align: right; width: 25%;">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">9,000</td>
+					</tr>
+					<tr>
+						<td stscope="row">On the Next</td>
+						<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">50,000</span></td>
+						<td style="text-align: right; width: 25%;">14%</td>
+						<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">7,000</span></td>
+					</tr>
+					<tr>
+						<td scope="row">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">200,000</td>
+						<td style="text-align: right; width: 25%;">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">16,000</td>
+					</tr>
+					<tr>
+						<td scope="row">Remainder</td>
+						<td style="text-align: right; width: 25%;">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">17%</td>
+						<td style="text-align: right; width: 25%;">&nbsp;</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 
-	<div style="height: 100px"></div> 
+	<div style="height: 100px"></div>
 </body>
 </html>
 
@@ -130,6 +129,7 @@
 	   	}
 	}
 
+
 	Array.prototype.forEach.call(radios, function(radio) {
 	   radio.addEventListener('change', changeHandler);
 	});
@@ -138,16 +138,22 @@
 	function calculate() {
 		var personal_income = document.getElementById('personal-income').value;
 
-		var personal_allowance = document.getElementById("personal-allowance").value;
+		if (personal_income == ''){
+			// Hide the income error msg
+			$('#income-alert').css('display', 'block');
+		} else{
+			$('#income-alert').css('display', 'none');
 
-		document.getElementById("mpf-contribution").value = calculateMPF(personal_income).toFixed(2);
+			var personal_allowance = document.getElementById("personal-allowance").value;
 
+			document.getElementById("mpf-contribution").value = calculateMPF(personal_income).toFixed(2);
 
-		var net_chargeable_income = personal_income - calculateMPF(personal_income) - personal_allowance;
+			var net_chargeable_income = personal_income - calculateMPF(personal_income) - personal_allowance;
 
-		document.getElementById("final-tax").innerHTML = calculateTax(net_chargeable_income).toFixed(2);
+			document.getElementById("final-tax").innerHTML = calculateTax(net_chargeable_income).toFixed(2);
 
-		// calculateTax(personal_income)
+			// calculateTax(personal_income)
+		}
 	}
 
 	function calculateMPF(personal_income) {
@@ -183,8 +189,11 @@
 		return tax;
 	}
 
-
-
+	// Clean input fields data
+	function resetAll() {
+		document.getElementById("input-form").reset();
+		$("#final-tax").html("<strong> 0.00 </strong>");
+	}
 
 	// Press enter will calculate
 	var input = document.getElementsByTagName("BODY")[0];
@@ -197,5 +206,10 @@
 	    // Trigger the button element with a click
 	    document.getElementById("enter-btn").click();
 	}
+
+	// Enable tooltips everywhere
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
 });
 </script>
