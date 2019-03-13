@@ -18,10 +18,13 @@
 
 		<br><br>
 
-		<label>Personal Income (Annual): </label>
+		<label>Personal Income (Annual): $</label>
 		<input id="personal-income" type="text" name="personal-income">
 		<br>
-		<label>Personal Allowance: </label>
+		<label>MPF Contribution: $</label>
+		<input id="mpf-contribution" type="text" name="mpf-contribution" disabled>
+		<br>
+		<label>Personal Allowance: $</label>
 		<input id="personal-allowance" type="text" name="personal-allowance" value="132000" disabled>
 
 
@@ -31,8 +34,8 @@
 
 		<hr>
 		<h3>Result</h3>
-		<label>Annual MPF: </label>
-		<p id="mpf-result"></p>
+		<label>Tax: </label>
+		<p id="final-tax"></p>
 
 		<br><br>
 		<table style="width: 60%; height: auto;" border="1" cellspacing="0" cellpadding="0">
@@ -131,21 +134,53 @@
 	   radio.addEventListener('change', changeHandler);
 	});
 
+
 	function calculate() {
 		var personal_income = document.getElementById('personal-income').value;
-		console.log(personal_income)
 
-		document.getElementById("mpf-result").innerHTML = calculateMPF(personal_income);
+		var personal_allowance = document.getElementById("personal-allowance").value;
+
+		document.getElementById("mpf-contribution").value = calculateMPF(personal_income).toFixed(2);
+
+
+		var net_chargeable_income = personal_income - calculateMPF(personal_income) - personal_allowance;
+
+		document.getElementById("final-tax").innerHTML = calculateTax(net_chargeable_income).toFixed(2);
+
+		// calculateTax(personal_income)
 	}
 
 	function calculateMPF(personal_income) {
-		if (personal_income < 7100) {
+		var monthly_income = personal_income / 12;
+		if (monthly_income < 7100) {
 			return 0 * 12
-		} else if (personal_income <= 30000) {
-			return personal_income * 0.05 * 12
+		} else if (monthly_income <= 30000) {
+			return monthly_income * 0.05 * 12
 		} else {
 			return 1500 * 12
 		}
+	}
+
+	function calculateTax(net_chargeable_income) {
+		console.log(net_chargeable_income);
+
+		var tax = 0;
+		var remaining_income = net_chargeable_income;
+		var income_per_count = 50000;
+		var tax_rate = 0.02;
+
+		// count how many round is needed
+		var cal_count = remaining_income / 50000;
+		console.log(cal_count);
+
+		for (var i = 1; i <= cal_count; i++) {
+		  	tax += income_per_count * tax_rate;
+		  	tax_rate += 0.04;
+		  	remaining_income -= income_per_count;
+		  	console.log(tax);
+		}
+		tax += remaining_income * 0.17;
+		return tax;
 	}
 
 
