@@ -40,6 +40,12 @@
 <body class="bg-secondary">
 	<div class="container bg-light">
 		<div style="height: 100px"></div>
+		<div class="alert alert-primary alert-dismissible">
+		  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+		  	<strong>Announcements!</strong><br><br>
+		  	<p>Year of assessment: <b>2018/19</b><br>Please refer to <a href="https://www.ird.gov.hk/eng/ese/st_comp_2018_19/stcfrm.htm" target="_blank" style="text-decoration: underline;">Salaries Tax Computation</a> also.</p>
+
+		</div>
 		<!-- <label>Marital Status: </label>
 		<br>
 		<input type="radio" name="marital_status" value="single" checked> Single / Separated / Divorced / Widowed<br>
@@ -86,15 +92,15 @@
 
 
 		<br>
-		<button class="btn btn-primary" id="enter-btn" onclick="calculate()" data-toggle="tooltip" title="Calculate the input">Enter</button>
-		<button class="btn btn-secondary" onclick="resetAll()" data-toggle="tooltip" title="Clear input data">Reset All</button>
+		<button class="btn btn-primary" id="enter-btn" onclick="calculate()" data-toggle="tooltip" title="Do calculation">Compute</button>
+		<button class="btn btn-secondary" onclick="resetAll()" data-toggle="tooltip" title="Clear inputs">Reset All</button>
 
 		<br>
 		<hr>
 		<h3>Comparison</h3>
 
 		<label>Final Tax: $</label>
-		<span id="final-compared-tax"><strong> 0.00 </strong></span>
+		<span id="final-compared-tax"><strong>  </strong></span>
 
 		<br>
 		<hr>
@@ -328,7 +334,7 @@
 
 
 		<br><br>
-		<h5>Tax Bracket</h5>
+		<h3>Tax Brackets</h3>
 		<div class="table-responsive">
 			<table class="table table-hover table-bordered">
 				<tbody>
@@ -462,7 +468,14 @@
 			document.getElementById("final-tax-standard-joint").innerHTML = final_tax_standard_joint.toFixed(2);
 
 			var final_compared_tax = getFinalComparedTax(final_tax_self, final_tax_spouse, final_tax_joint, final_tax_standard_self, final_tax_standard_spouse, final_tax_standard_joint);
-			$('#final-compared-tax').html(final_compared_tax);
+
+			console.log("final_compared_tax:  " + final_compared_tax);
+			if (isNaN(final_compared_tax)){
+				$('#final-compared-tax').html("");
+			} else {
+				$('#final-compared-tax').html(final_compared_tax);
+			}
+			
 
 		}
 	}
@@ -594,7 +607,7 @@
 	function resetAll() {
 		document.getElementById("input-form-self").reset();
 		document.getElementById("input-form-spouse").reset();
-		$("#final-compared-tax").html("<strong> 0.00 </strong>");
+		$("#final-compared-tax").html("");
 		$(".net-chargeable-income").empty();
 		$(".each-step-tax").empty();
 	}
