@@ -389,11 +389,11 @@
 		} else{
 			$('#income-alert').css('display', 'none');
 
-			var net_chargeable_income_self = calculateNetChargeableIncome('self', personal_income, personal_allowance_seperated);
+			var net_chargeable_income_self = calculateNetChargeableIncome('self', personal_income, personal_allowance_seperated, 0);
 
-			var net_chargeable_income_spouse = calculateNetChargeableIncome('spouse', personal_income_spouse, personal_allowance_seperated);
+			var net_chargeable_income_spouse = calculateNetChargeableIncome('spouse', personal_income_spouse, personal_allowance_seperated, 0);
 
-			var net_chargeable_income_joint = calculateNetChargeableIncome('joint', personal_income + personal_income_spouse, personal_allowance_joint);
+			var net_chargeable_income_joint = calculateNetChargeableIncome('joint', personal_income, personal_allowance_joint, personal_income_spouse);
 
 			var final_tax_self = calculateTax(net_chargeable_income_self, 'self');
 			var final_tax_spouse = calculateTax(net_chargeable_income_spouse, 'spouse');
@@ -414,11 +414,13 @@
 		}
 	}
 
-	function calculateNetChargeableIncome(self_spouse, personal_income, personal_allowance) {
+	function calculateNetChargeableIncome(self_spouse, personal_income, personal_allowance, personal_income_spouse) {
 
-		document.getElementById("mpf-contribution-" + self_spouse).innerHTML = calculateMPF(personal_income).toFixed(2);
+		var mpf = calculateMPF(personal_income) + calculateMPF(personal_income_spouse);
 
-		var net_chargeable_income = personal_income - calculateMPF(personal_income) - personal_allowance;
+		document.getElementById("mpf-contribution-" + self_spouse).innerHTML = mpf.toFixed(2);
+
+		var net_chargeable_income = personal_income + personal_income_spouse - mpf - personal_allowance;
 
 		document.getElementById("net-chargeable-income-" + self_spouse).innerHTML = net_chargeable_income.toFixed(2);
 
