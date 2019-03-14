@@ -120,7 +120,7 @@
 				<br>
 			</div>
 
-			<div class="col-sm">
+			<div class="col-sm empty-spouse">
 				<div class="card" style="width: 18rem;">
 					<div class="card-body">
 						<h5 class="card-title">Spouse: </h5>
@@ -143,7 +143,7 @@
 				<br>
 			</div>
 
-			<div class="col-sm">
+			<div class="col-sm empty-spouse">
 				<div class="card" style="width: 18rem;">
 					<div class="card-body">
 						<h5 class="card-title">Result (Joint): </h5>
@@ -217,7 +217,7 @@
 				<br>
 			</div>
 
-			<div class="col-sm">
+			<div class="col-sm empty-spouse">
 				<div id="result-spouse" class="result-half-div">
 					<h5>Result (Spouse)</h5>
 					<table id="result-tax-table-spouse" class="result-tax-table" border="1">
@@ -262,7 +262,7 @@
 				<br>
 			</div>
 
-			<div class="col-sm">
+			<div class="col-sm empty-spouse">
 				<div id="result-joint" class="result-half-div">
 					<h5>Result (Joint)</h5>
 					<table id="result-tax-table-joint" class="result-tax-table" border="1">
@@ -402,7 +402,13 @@
 		const personal_allowance_seperated = 132000;
 		const personal_allowance_joint = 264000;
 
-		if (personal_income == ''){
+		if (isNaN(personal_income_spouse)){
+			$('.empty-spouse').hide();
+		} else {
+			$('.empty-spouse').show();
+		}
+
+		if (isNaN(personal_income)){
 			// Hide the income error msg
 			$('#income-alert').css('display', 'block');
 		} else{
@@ -441,8 +447,11 @@
 
 		var net_chargeable_income = personal_income + personal_income_spouse - mpf - personal_allowance;
 
+		net_chargeable_income = net_chargeable_income < 0 ? 0 : net_chargeable_income;
+
 		document.getElementById("net-chargeable-income-" + self_spouse).innerHTML = net_chargeable_income.toFixed(2);
 
+		// console.log(net_chargeable_income < 0 ? 0 : net_chargeable_income)
 		return net_chargeable_income;
 	}
 
