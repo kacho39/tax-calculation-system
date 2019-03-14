@@ -458,7 +458,7 @@
 			tax += income_per_count * tax_rate;
 			remaining_income -= income_per_count;
 			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-' + i + ' .net-chargeable-income').innerHTML = income_per_count;
-			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-' + i + ' .each-step-tax').innerHTML = (income_per_count * tax_rate);
+			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-' + i + ' .each-step-tax').innerHTML = (income_per_count * tax_rate).toFixed(2);
 			tax_rate += 0.04;
 		}
 
