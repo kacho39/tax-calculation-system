@@ -89,10 +89,16 @@
 		<button class="btn btn-primary" id="enter-btn" onclick="calculate()" data-toggle="tooltip" title="Calculate the input">Enter</button>
 		<button class="btn btn-secondary" onclick="resetAll()" data-toggle="tooltip" title="Clear input data">Reset All</button>
 
+		<br>
+		<hr>
+		<h3>Comparison</h3>
+
+		<label>Final Tax: $</label>
+		<span id="final-compared-tax"><strong> 0.00 </strong></span>
 
 		<br>
 		<hr>
-		<h3>Result (Separated)</h3>
+		<h3>Result</h3>
 		<!-- <label>Tax: $</label> -->
 		<!-- <span id="final-tax-separated"><strong> 0.00 </strong></span> -->
 		<br>
@@ -109,6 +115,9 @@
 						<br>
 						<label>Net Chargeable Income: $</label>
 						<span id="net-chargeable-income-self"></span>
+						<br>
+						<label>Net Income: $</label>
+						<span id="net-income-self"></span>
 						<br>
 						<label>Tax (Progressive): $</label>
 						<span id="final-tax-self"></span>
@@ -132,6 +141,9 @@
 						<br>
 						<label>Net Chargeable Income: $</label>
 						<span id="net-chargeable-income-spouse"></span>
+						<br>
+						<label>Net Income: $</label>
+						<span id="net-income-spouse"></span>
 						<br>
 						<label>Tax (Progressive): $</label>
 						<span id="final-tax-spouse"></span>
@@ -158,6 +170,9 @@
 						<label>Net Chargeable Income: $</label>
 						<span id="net-chargeable-income-joint"></span>
 						<br>
+						<label>Net Income: $</label>
+						<span id="net-income-joint"></span>
+						<br>
 						<label>Tax (Progressive): $</label>
 						<span id="final-tax-joint"></span>
 						<br>
@@ -171,10 +186,11 @@
 
 		<br><br>
 
+		<h3>Progressive rate Calculation</h3>
 		<div class="row">
 			<div class="col-sm">
 				<div id="result-self" class="result-half-div">
-					<h5>Result (Self)</h5>
+					<h5>Self</h5>
 					<table id="result-tax-table-self" class="result-tax-table table-bordered">
 						<tr>
 							<th>Step</th>
@@ -219,7 +235,7 @@
 
 			<div class="col-sm empty-spouse">
 				<div id="result-spouse" class="result-half-div">
-					<h5>Result (Spouse)</h5>
+					<h5>Spouse</h5>
 					<table id="result-tax-table-spouse" class="result-tax-table table-bordered">
 						<tr>
 							<th>Step</th>
@@ -264,7 +280,7 @@
 
 			<div class="col-sm empty-spouse">
 				<div id="result-joint" class="result-half-div">
-					<h5>Result (Joint)</h5>
+					<h5>Joint</h5>
 					<table id="result-tax-table-joint" class="result-tax-table table-bordered">
 						<tr>
 							<th>Step</th>
@@ -419,6 +435,15 @@
 
 			var net_chargeable_income_joint = calculateNetChargeableIncome('joint', personal_income, personal_allowance_joint, personal_income_spouse);
 
+			var net_income_self = calculateNetIncome('self', personal_income, 0);
+			var net_income_spouse = calculateNetIncome('spouse', personal_income_spouse, 0);
+			var net_income_joint = calculateNetIncome('joint', personal_income, personal_income_spouse);
+
+			document.getElementById("net-income-self").innerHTML = net_income_self.toFixed(2);
+			document.getElementById("net-income-spouse").innerHTML = net_income_spouse.toFixed(2);
+			document.getElementById("net-income-joint").innerHTML = net_income_joint.toFixed(2);
+
+			// progressive
 			var final_tax_self = calculateTax(net_chargeable_income_self, 'self');
 			var final_tax_spouse = calculateTax(net_chargeable_income_spouse, 'spouse');
 			var final_tax_joint = calculateTax(net_chargeable_income_joint, 'joint')
@@ -427,17 +452,76 @@
 			document.getElementById("final-tax-spouse").innerHTML = final_tax_spouse.toFixed(2);
 			document.getElementById("final-tax-joint").innerHTML = final_tax_joint.toFixed(2);
 
-
-			var final_tax_standard_self = net_chargeable_income_self * 0.15;
-			var final_tax_standard_spouse = net_chargeable_income_spouse * 0.15;
-			var final_tax_standard_joint = net_chargeable_income_joint * 0.15;
+			// standard
+			var final_tax_standard_self = net_income_self * 0.15;
+			var final_tax_standard_spouse = net_income_spouse * 0.15;
+			var final_tax_standard_joint = net_income_joint * 0.15;
 
 			document.getElementById("final-tax-standard-self").innerHTML = final_tax_standard_self.toFixed(2);
 			document.getElementById("final-tax-standard-spouse").innerHTML = final_tax_standard_spouse.toFixed(2);
 			document.getElementById("final-tax-standard-joint").innerHTML = final_tax_standard_joint.toFixed(2);
+
+			var final_compared_tax = getFinalComparedTax(final_tax_self, final_tax_spouse, final_tax_joint, final_tax_standard_self, final_tax_standard_spouse, final_tax_standard_joint);
+			$('#final-compared-tax').html(final_compared_tax);
+
 		}
 	}
 
+	function getFinalComparedTax(final_tax_self, final_tax_spouse, final_tax_joint, final_tax_standard_self, final_tax_standard_spouse, final_tax_standard_joint) {
+		var self_use_standard = checkIfApplyStandardRate(final_tax_self, final_tax_standard_self);
+		var spouse_use_standard = checkIfApplyStandardRate(final_tax_spouse, final_tax_standard_spouse);
+		var joint_use_standard = checkIfApplyStandardRate(final_tax_joint, final_tax_standard_joint);
+
+		var separated_tax = 0;
+		var joint_tax = 0;
+
+		if (self_use_standard) {
+			$('#final-tax-standard-self').css('color', 'green');
+			separated_tax += final_tax_standard_self;
+		} else {
+			$('#final-tax-self').css('color', 'green');
+			separated_tax += final_tax_self;
+		}
+
+		if (spouse_use_standard) {
+			$('#final-tax-standard-spouse').css('color', 'green');
+			separated_tax += final_tax_standard_spouse;
+		} else {
+			$('#final-tax-spouse').css('color', 'green');
+			separated_tax += final_tax_spouse;
+		}
+
+		if (joint_use_standard) {
+			$('#final-tax-standard-joint').css('color', 'green');
+			joint_tax += final_tax_standard_joint;
+		} else {
+			$('#final-tax-joint').css('color', 'green');
+			joint_tax += final_tax_joint;
+		}
+
+		if (separated_tax < joint_tax) {
+			return separated_tax;
+		} else {
+			return joint_tax;
+		}
+	}
+	function checkIfApplyStandardRate(progressive, standard) {
+		if (progressive < standard) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	function calculateNetIncome(self_spouse, personal_income, personal_income_spouse) {
+
+		var mpf = calculateMPF(personal_income) + calculateMPF(personal_income_spouse);
+
+		var net_chargeable_income = personal_income + personal_income_spouse - mpf;
+
+		net_chargeable_income = net_chargeable_income < 0 ? 0 : net_chargeable_income;
+
+		return net_chargeable_income;
+	}
 	function calculateNetChargeableIncome(self_spouse, personal_income, personal_allowance, personal_income_spouse) {
 
 		var mpf = calculateMPF(personal_income) + calculateMPF(personal_income_spouse);
@@ -478,7 +562,7 @@
 
 		// count how many round is needed
 		var cal_count = (remaining_income / 50000 > 4) ? 4 : remaining_income / 50000;
-		// console.log(cal_count);
+		console.log(cal_count);
 
 		for (var i = 1; i <= cal_count; i++) {
 
@@ -488,15 +572,19 @@
 			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-' + i + ' .each-step-tax').innerHTML = (income_per_count * tax_rate).toFixed(2);
 			tax_rate += 0.04;
 		}
+			console.log(remaining_income)
 
 		if (cal_count < 4) {
 			tax += remaining_income * tax_rate;
-			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-' + Math.floor(cal_count + 1) + ' .net-chargeable-income').innerHTML = remaining_income;
+			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-' + Math.floor(cal_count + 1) + ' .net-chargeable-income').innerHTML = remaining_income.toFixed(2);
 			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-' + Math.floor(cal_count + 1) + ' .each-step-tax').innerHTML = (remaining_income * tax_rate).toFixed(2);
 		} else {
+			console.log('af')
 			tax += remaining_income * 0.17;
-			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-5 .net-chargeable-income').innerHTML = remaining_income;
-			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-5 .each-step-tax').innerHTML = tax.toFixed(2);
+			console.log(remaining_income)
+			console.log(tax);
+			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-5 .net-chargeable-income').innerHTML = remaining_income.toFixed(2);
+			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-5 .each-step-tax').innerHTML = (remaining_income * tax_rate).toFixed(2);
 		}
 
 		return tax;
@@ -506,7 +594,7 @@
 	function resetAll() {
 		document.getElementById("input-form-self").reset();
 		document.getElementById("input-form-spouse").reset();
-		$("#final-tax").html("<strong> 0.00 </strong>");
+		$("#final-compared-tax").html("<strong> 0.00 </strong>");
 		$(".net-chargeable-income").empty();
 		$(".each-step-tax").empty();
 	}
