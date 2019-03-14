@@ -50,7 +50,7 @@
 				<h2>Self</h2>
 				<label>Personal Income (Annual): $</label>
 				<form id="input-form-self" class="inline-box-form">
-					<input id="personal-income" type="number"  min="0" name="personal-income" oninput="validity.valid||(value='');">
+					<input id="personal-income" class="form-control" type="number"  min="0" name="personal-income" oninput="validity.valid||(value='');">
 					<div id="income-alert" style="display: none; color: red;">* Income cannot be empty!</div>
 					<!-- <br>
 					<label>MPF Contribution: $</label>
@@ -69,7 +69,7 @@
 				<h2>Spouse</h2>
 				<label>Personal Income (Annual): $</label>
 				<form id="input-form-spouse" class="inline-box-form">
-					<input id="personal-income-spouse" type="number"  min="0" name="personal-income" oninput="validity.valid||(value='');">
+					<input id="personal-income-spouse" class="form-control" type="number"  min="0" name="personal-income" oninput="validity.valid||(value='');">
 					<div id="income-alert-spouse" style="display: none; color: red;">* Income cannot be empty!</div>
 					<!-- <br>
 					<label>MPF Contribution: $</label>
@@ -175,7 +175,7 @@
 			<div class="col-sm">
 				<div id="result-self" class="result-half-div">
 					<h5>Result (Self)</h5>
-					<table id="result-tax-table-self" class="result-tax-table" border="1">
+					<table id="result-tax-table-self" class="result-tax-table table-bordered">
 						<tr>
 							<th>Step</th>
 							<th>Net Chargeable Income</th>
@@ -220,7 +220,7 @@
 			<div class="col-sm empty-spouse">
 				<div id="result-spouse" class="result-half-div">
 					<h5>Result (Spouse)</h5>
-					<table id="result-tax-table-spouse" class="result-tax-table" border="1">
+					<table id="result-tax-table-spouse" class="result-tax-table table-bordered">
 						<tr>
 							<th>Step</th>
 							<th>Net Chargeable Income</th>
@@ -265,7 +265,7 @@
 			<div class="col-sm empty-spouse">
 				<div id="result-joint" class="result-half-div">
 					<h5>Result (Joint)</h5>
-					<table id="result-tax-table-joint" class="result-tax-table" border="1">
+					<table id="result-tax-table-joint" class="result-tax-table table-bordered">
 						<tr>
 							<th>Step</th>
 							<th>Net Chargeable Income</th>
@@ -384,7 +384,7 @@
 			</table>
 		</div>
 	</div>
-	
+
 </body>
 </html>
 <style>
