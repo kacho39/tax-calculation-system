@@ -99,6 +99,9 @@
 		<hr>
 		<h3>Comparison</h3>
 
+		<label>Suggested Use: </label>
+		<span id="final-separated-joint"></span>
+		<br>
 		<label>Final Tax: $</label>
 		<span id="final-compared-tax"><strong>  </strong></span>
 
@@ -126,10 +129,10 @@
 						<span id="net-income-self"></span>
 						<br>
 						<label>Tax (Progressive): $</label>
-						<span id="final-tax-self"></span>
+						<span id="final-tax-self" class="final-tax-result"></span>
 						<br>
 						<label>Tax (Standard): $</label>
-						<span id="final-tax-standard-self"></span>
+						<span id="final-tax-standard-self" class="final-tax-result"></span>
 					</div>
 				</div>
 				<br>
@@ -152,10 +155,10 @@
 						<span id="net-income-spouse"></span>
 						<br>
 						<label>Tax (Progressive): $</label>
-						<span id="final-tax-spouse"></span>
+						<span id="final-tax-spouse" class="final-tax-result"></span>
 						<br>
 						<label>Tax (Standard): $</label>
-						<span id="final-tax-standard-spouse"></span>
+						<span id="final-tax-standard-spouse" class="final-tax-result"></span>
 					</div>
 				</div>
 				<br>
@@ -180,10 +183,10 @@
 						<span id="net-income-joint"></span>
 						<br>
 						<label>Tax (Progressive): $</label>
-						<span id="final-tax-joint"></span>
+						<span id="final-tax-joint" class="final-tax-result"></span>
 						<br>
 						<label>Tax (Standard): $</label>
-						<span id="final-tax-standard-joint"></span>
+						<span id="final-tax-standard-joint" class="final-tax-result"></span>
 					</div>
 				</div>
 			</div>
@@ -513,9 +516,11 @@
 		}
 
 		if (separated_tax < joint_tax) {
-			return separated_tax;
+			$('#final-separated-joint').html('Separated')
+			return separated_tax.toFixed(2);
 		} else {
-			return joint_tax;
+			$('#final-separated-joint').html('Joint')
+			return joint_tax.toFixed(2);
 		}
 	}
 	function checkIfApplyStandardRate(progressive, standard) {
@@ -610,6 +615,8 @@
 		$("#final-compared-tax").html("");
 		$(".net-chargeable-income").empty();
 		$(".each-step-tax").empty();
+		$("#final-separated-joint").html("");
+		$(".final-tax-result").css('color', 'black');
 	}
 
 	// Press enter will calculate
