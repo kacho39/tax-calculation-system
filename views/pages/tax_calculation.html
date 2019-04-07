@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tax Calculation</title>
+
+	<style type="text/css">
+		.result-tax-table {
+			/*width: 50%;
+			text-align: center;*/
+		    /*width: 45%;*/
+    		text-align: center;
+    		display: inline-block;
+		}
+		.result-tax-table th {
+			width: 25%;
+		}
+		.result-half-div {
+			width: 47%;
+			/*display: inline-block;*/
+		}
+		.result-half-div h2 {
+			text-align: center;
+			/*width: 45%;*/
+			/*display: inline-block;*/
+		}
+		#result-self {
+			/*float: left;*/
+		}
+		#result-spouse {
+			/*float: right;*/
+			/*margin-left: 5%;*/
+		}
+	</style>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body class="bg-secondary">
+	<div class="container bg-light">
+		<div style="height: 100px"></div>
+		<div class="alert alert-primary alert-dismissible">
+		  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+		  	<strong>Announcements!</strong><br><br>
+		  	<p>Year of assessment: <b>2018/19</b><br>Please refer to <a href="https://www.ird.gov.hk/eng/ese/st_comp_2018_19/stcfrm.htm" target="_blank" style="text-decoration: underline;">Salaries Tax Computation</a> also.</p>
+
+		</div>
+		<!-- <label>Marital Status: </label>
+		<br>
+		<input type="radio" name="marital_status" value="single" checked> Single / Separated / Divorced / Widowed<br>
+		<input type="radio" name="marital_status" value="married"> Married<br> -->
+		<br><br>
+		<div class="row">
+			<div class="col-6 col-md-6 col-sm-4">
+				<h2>Self</h2>
+				<label>Personal Income (Annual): $</label>
+				<form id="input-form-self" class="inline-box-form">
+					<input id="personal-income" class="form-control" type="number"  min="0" name="personal-income" oninput="validity.valid||(value='');">
+					<div id="income-alert" style="display: none; color: red;">* Income cannot be empty!</div>
+					<!-- <br>
+					<label>MPF Contribution: $</label>
+					<input id="mpf-contribution-self" type="number" name="mpf-contribution" disabled>
+					<br>
+					<label>Personal Allowance: $</label>
+					<input id="personal-allowance" type="number" name="personal-allowance" value="132000" disabled>
+					<br>
+					<label>Net Chargeable Income: $</label>
+					<input id="net-chargeable-income-self" type="number" name="net-chargeable-income" disabled> -->
+				</form>
+
+			</div>
+
+			<div class="col-6 col-md-6 col-sm-4">
+				<h2>Spouse</h2>
+				<label>Personal Income (Annual): $</label>
+				<form id="input-form-spouse" class="inline-box-form">
+					<input id="personal-income-spouse" class="form-control" type="number"  min="0" name="personal-income" oninput="validity.valid||(value='');">
+					<div id="income-alert-spouse" style="display: none; color: red;">* Income cannot be empty!</div>
+					<!-- <br>
+					<label>MPF Contribution: $</label>
+					<input id="mpf-contribution-spouse" type="number" name="mpf-contribution" disabled>
+					<br>
+					<label>Personal Allowance: $</label>
+					<input id="personal-allowance-spouse" type="number" name="personal-allowance" value="132000" disabled>
+					<br>
+					<label>Net Chargeable Income: $</label>
+					<input id="net-chargeable-income-spouse" type="number" name="net-chargeable-income" disabled> -->
+				</form>
+			</div>
+		</div>
+
+
+		<br>
+		<button class="btn btn-primary" id="enter-btn" onclick="calculate()" data-toggle="tooltip" title="Do calculation">Compute</button>
+		<button class="btn btn-secondary" onclick="resetAll()" data-toggle="tooltip" title="Clear inputs">Reset All</button>
+
+		<br>
+		<hr>
+		<h3>Comparison</h3>
+
+		<label>Suggested Use: </label>
+		<span id="final-separated-joint"></span>
+		<br>
+		<label>Final Tax: $</label>
+		<span id="final-compared-tax"><strong>  </strong></span>
+
+		<br>
+		<hr>
+		<h3>Result</h3>
+		<!-- <label>Tax: $</label> -->
+		<!-- <span id="final-tax-separated"><strong> 0.00 </strong></span> -->
+		<br>
+		<div class="row">
+			<div class="col-sm">
+				<div class="card" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title">Self: </h5>
+						<label>MPF Contribution: $</label>
+						<span id="mpf-contribution-self"></span>
+						<br>
+						<label>Personal Allowance: $</label>
+						<span id="personal-allowance-self">132000</span>
+						<br>
+						<label>Net Chargeable Income: $</label>
+						<span id="net-chargeable-income-self"></span>
+						<br>
+						<label>Net Income: $</label>
+						<span id="net-income-self"></span>
+						<br>
+						<label>Tax (Progressive): $</label>
+						<span id="final-tax-self" class="final-tax-result"></span>
+						<br>
+						<label>Tax (Standard): $</label>
+						<span id="final-tax-standard-self" class="final-tax-result"></span>
+					</div>
+				</div>
+				<br>
+			</div>
+
+			<div class="col-sm empty-spouse">
+				<div class="card" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title">Spouse: </h5>
+						<label>MPF Contribution: $</label>
+						<span id="mpf-contribution-spouse"></span>
+						<br>
+						<label>Personal Allowance: $</label>
+						<span id="personal-allowance-spouse">132000</span>
+						<br>
+						<label>Net Chargeable Income: $</label>
+						<span id="net-chargeable-income-spouse"></span>
+						<br>
+						<label>Net Income: $</label>
+						<span id="net-income-spouse"></span>
+						<br>
+						<label>Tax (Progressive): $</label>
+						<span id="final-tax-spouse" class="final-tax-result"></span>
+						<br>
+						<label>Tax (Standard): $</label>
+						<span id="final-tax-standard-spouse" class="final-tax-result"></span>
+					</div>
+				</div>
+				<br>
+			</div>
+
+			<div class="col-sm empty-spouse">
+				<div class="card" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title">Result (Joint): </h5>
+						<!-- <label>Tax: $</label> -->
+						<!-- <span id="final-tax-joint"><strong> 0.00 </strong></span> -->
+						<label>MPF Contribution: $</label>
+						<span id="mpf-contribution-joint"></span>
+						<br>
+						<label>Personal Allowance: $</label>
+						<span id="personal-allowance-joint">264000</span>
+						<br>
+						<label>Net Chargeable Income: $</label>
+						<span id="net-chargeable-income-joint"></span>
+						<br>
+						<label>Net Income: $</label>
+						<span id="net-income-joint"></span>
+						<br>
+						<label>Tax (Progressive): $</label>
+						<span id="final-tax-joint" class="final-tax-result"></span>
+						<br>
+						<label>Tax (Standard): $</label>
+						<span id="final-tax-standard-joint" class="final-tax-result"></span>
+					</div>
+				</div>
+			</div>
+			<br>
+		</div>
+
+		<br><br>
+
+		<h3>Progressive rate Calculation</h3>
+		<div class="row">
+			<div class="col-sm">
+				<div id="result-self" class="result-half-div">
+					<h5>Self</h5>
+					<table id="result-tax-table-self" class="result-tax-table table-bordered">
+						<tr>
+							<th>Step</th>
+							<th>Net Chargeable Income</th>
+							<th>Rate</th>
+							<th>Tax</th>
+						</tr>
+						<tr class="step-row-1">
+							<td>On the First</td>
+							<td class="net-chargeable-income"></td>
+							<td>2%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+						<tr class="step-row-2">
+							<td>On the Next</td>
+							<td class="net-chargeable-income"></td>
+							<td>6%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+						<tr class="step-row-3">
+							<td>On the Next</td>
+							<td class="net-chargeable-income"></td>
+							<td>10%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+						<tr class="step-row-4">
+							<td>On the Next</td>
+							<td class="net-chargeable-income"></td>
+							<td>14%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+						<tr class="step-row-5">
+							<td>Remainder</td>
+							<td class="net-chargeable-income"></td>
+							<td>17%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+					</table>
+				</div>
+				<br>
+			</div>
+
+			<div class="col-sm empty-spouse">
+				<div id="result-spouse" class="result-half-div">
+					<h5>Spouse</h5>
+					<table id="result-tax-table-spouse" class="result-tax-table table-bordered">
+						<tr>
+							<th>Step</th>
+							<th>Net Chargeable Income</th>
+							<th>Rate</th>
+							<th>Tax</th>
+						</tr>
+						<tr class="step-row-1">
+							<td>On the First</td>
+							<td class="net-chargeable-income"></td>
+							<td>2%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+						<tr class="step-row-2">
+							<td>On the Next</td>
+							<td class="net-chargeable-income"></td>
+							<td>6%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+						<tr class="step-row-3">
+							<td>On the Next</td>
+							<td class="net-chargeable-income"></td>
+							<td>10%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+						<tr class="step-row-4">
+							<td>On the Next</td>
+							<td class="net-chargeable-income"></td>
+							<td>14%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+						<tr class="step-row-5">
+							<td>Remainder</td>
+							<td class="net-chargeable-income"></td>
+							<td>17%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+					</table>
+				</div>
+				<br>
+			</div>
+
+			<div class="col-sm empty-spouse">
+				<div id="result-joint" class="result-half-div">
+					<h5>Joint</h5>
+					<table id="result-tax-table-joint" class="result-tax-table table-bordered">
+						<tr>
+							<th>Step</th>
+							<th>Net Chargeable Income</th>
+							<th>Rate</th>
+							<th>Tax</th>
+						</tr>
+						<tr class="step-row-1">
+							<td>On the First</td>
+							<td class="net-chargeable-income"></td>
+							<td>2%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+						<tr class="step-row-2">
+							<td>On the Next</td>
+							<td class="net-chargeable-income"></td>
+							<td>6%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+						<tr class="step-row-3">
+							<td>On the Next</td>
+							<td class="net-chargeable-income"></td>
+							<td>10%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+						<tr class="step-row-4">
+							<td>On the Next</td>
+							<td class="net-chargeable-income"></td>
+							<td>14%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+						<tr class="step-row-5">
+							<td>Remainder</td>
+							<td class="net-chargeable-income"></td>
+							<td>17%</td>
+							<td class="each-step-tax"></td>
+						</tr>
+					</table>
+				</div>
+				<br>
+			</div>
+		</div>
+
+		<hr>
+
+
+		<br><br>
+		<h3>Tax Brackets</h3>
+		<div class="table-responsive">
+			<table class="table table-hover table-bordered">
+				<tbody>
+					<tr class="table-primary">
+						<th scope="col">&nbsp;</th>
+						<th scope="col">Net chargeable Income</th>
+						<th scope="col">Rate</th>
+						<th scope="col">Tax</th>
+					</tr>
+					<tr>
+						<th style="width: 25%;">&nbsp;</th>
+						<th style="text-align: center; width: 25%;">
+							<p>$</p>
+						</th>
+						<th style="text-align: center; width: 25%;">&nbsp;</th>
+						<th style="text-align: center; width: 25%;">
+							<p>$</p>
+						</th>
+					</tr>
+					<tr>
+						<td scope="row">On the First</td>
+						<td style="text-align: right; width: 25%;">50,000</td>
+						<td style="text-align: right; width: 25%;" id="first">2%</td>
+						<td style="text-align: right; width: 25%;">1,000</td>
+					</tr>
+					<tr>
+						<td scope="row">On the Next</td>
+						<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">50,000</span></td>
+						<td style="text-align: right; width: 25%;" id="second">6%</td>
+						<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">3,000</span></td>
+					</tr>
+					<tr>
+						<td scope="row">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">100,000</td>
+						<td style="text-align: right; width: 25%;">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">4,000</td>
+					</tr>
+					<tr>
+						<td scope="row">On the Next</td>
+						<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">50,000</span></td>
+						<td style="text-align: right; width: 25%;" id="third">10%</td>
+						<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">5,000</span></td>
+					</tr>
+					<tr>
+						<td scope="row">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">150,000</td>
+						<td style="text-align: right; width: 25%;">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">9,000</td>
+					</tr>
+					<tr>
+						<td stscope="row">On the Next</td>
+						<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">50,000</span></td>
+						<td style="text-align: right; width: 25%;" id="fourth">14%</td>
+						<td style="text-align: right; width: 25%;"><span style="text-decoration: underline;">7,000</span></td>
+					</tr>
+					<tr>
+						<td scope="row">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">200,000</td>
+						<td style="text-align: right; width: 25%;">&nbsp;</td>
+						<td style="text-align: right; width: 25%;">16,000</td>
+					</tr>
+					<tr>
+						<td scope="row">Remainder</td>
+						<td style="text-align: right; width: 25%;">&nbsp;</td>
+						<td style="text-align: right; width: 25%;" id="remaining">17%</td>
+						<td style="text-align: right; width: 25%;">&nbsp;</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</body>
+</html>
+<style>
+	#tax td {
+		padding: 5px;
+	}
+</style>
+<script type="text/javascript">
+
+	function calculate() {
+		var personal_income = parseFloat(document.getElementById('personal-income').value);
+		var personal_income_spouse = parseFloat(document.getElementById('personal-income-spouse').value);
+
+		const personal_allowance_seperated = 132000;
+		const personal_allowance_joint = 264000;
+
+		if (isNaN(personal_income_spouse)){
+			$('.empty-spouse').hide();
+		} else {
+			$('.empty-spouse').show();
+		}
+
+		if (isNaN(personal_income)){
+			// Hide the income error msg
+			$('#income-alert').css('display', 'block');
+		} else{
+			$('#income-alert').css('display', 'none');
+
+			var net_chargeable_income_self = calculateNetChargeableIncome('self', personal_income, personal_allowance_seperated, 0);
+
+			var net_chargeable_income_spouse = calculateNetChargeableIncome('spouse', personal_income_spouse, personal_allowance_seperated, 0);
+
+			var net_chargeable_income_joint = calculateNetChargeableIncome('joint', personal_income, personal_allowance_joint, personal_income_spouse);
+
+			var net_income_self = calculateNetIncome('self', personal_income, 0);
+			var net_income_spouse = calculateNetIncome('spouse', personal_income_spouse, 0);
+			var net_income_joint = calculateNetIncome('joint', personal_income, personal_income_spouse);
+
+			document.getElementById("net-income-self").innerHTML = net_income_self.toFixed(2);
+			document.getElementById("net-income-spouse").innerHTML = net_income_spouse.toFixed(2);
+			document.getElementById("net-income-joint").innerHTML = net_income_joint.toFixed(2);
+
+			// progressive
+			var final_tax_self = calculateTax(net_chargeable_income_self, 'self');
+			var final_tax_spouse = calculateTax(net_chargeable_income_spouse, 'spouse');
+			var final_tax_joint = calculateTax(net_chargeable_income_joint, 'joint')
+
+			document.getElementById("final-tax-self").innerHTML = final_tax_self.toFixed(2);
+			document.getElementById("final-tax-spouse").innerHTML = final_tax_spouse.toFixed(2);
+			document.getElementById("final-tax-joint").innerHTML = final_tax_joint.toFixed(2);
+
+			// standard
+			var final_tax_standard_self = net_income_self * 0.15;
+			var final_tax_standard_spouse = net_income_spouse * 0.15;
+			var final_tax_standard_joint = net_income_joint * 0.15;
+
+			document.getElementById("final-tax-standard-self").innerHTML = final_tax_standard_self.toFixed(2);
+			document.getElementById("final-tax-standard-spouse").innerHTML = final_tax_standard_spouse.toFixed(2);
+			document.getElementById("final-tax-standard-joint").innerHTML = final_tax_standard_joint.toFixed(2);
+
+			var final_compared_tax = getFinalComparedTax(final_tax_self, final_tax_spouse, final_tax_joint, final_tax_standard_self, final_tax_standard_spouse, final_tax_standard_joint);
+
+			console.log("final_compared_tax:  " + final_compared_tax);
+			if (isNaN(final_compared_tax)){
+				$('#final-compared-tax').html("");
+			} else {
+				$('#final-compared-tax').html(final_compared_tax);
+			}
+			
+
+		}
+	}
+
+	function getFinalComparedTax(final_tax_self, final_tax_spouse, final_tax_joint, final_tax_standard_self, final_tax_standard_spouse, final_tax_standard_joint) {
+		var self_use_standard = checkIfApplyStandardRate(final_tax_self, final_tax_standard_self);
+		var spouse_use_standard = checkIfApplyStandardRate(final_tax_spouse, final_tax_standard_spouse);
+		var joint_use_standard = checkIfApplyStandardRate(final_tax_joint, final_tax_standard_joint);
+
+		var separated_tax = 0;
+		var joint_tax = 0;
+
+		if (self_use_standard) {
+			$('#final-tax-standard-self').css('color', 'green');
+			separated_tax += final_tax_standard_self;
+		} else {
+			$('#final-tax-self').css('color', 'green');
+			separated_tax += final_tax_self;
+		}
+
+		if (spouse_use_standard) {
+			$('#final-tax-standard-spouse').css('color', 'green');
+			separated_tax += final_tax_standard_spouse;
+		} else {
+			$('#final-tax-spouse').css('color', 'green');
+			separated_tax += final_tax_spouse;
+		}
+
+		if (joint_use_standard) {
+			$('#final-tax-standard-joint').css('color', 'green');
+			joint_tax += final_tax_standard_joint;
+		} else {
+			$('#final-tax-joint').css('color', 'green');
+			joint_tax += final_tax_joint;
+		}
+
+		if (separated_tax < joint_tax) {
+			$('#final-separated-joint').html('Separated')
+			return separated_tax.toFixed(2);
+		} else {
+			$('#final-separated-joint').html('Joint')
+			return joint_tax.toFixed(2);
+		}
+	}
+	function checkIfApplyStandardRate(progressive, standard) {
+		if (progressive < standard) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	function calculateNetIncome(self_spouse, personal_income, personal_income_spouse) {
+
+		var mpf = calculateMPF(personal_income) + calculateMPF(personal_income_spouse);
+
+		var net_chargeable_income = personal_income + personal_income_spouse - mpf;
+
+		net_chargeable_income = net_chargeable_income < 0 ? 0 : net_chargeable_income;
+
+		return net_chargeable_income;
+	}
+	function calculateNetChargeableIncome(self_spouse, personal_income, personal_allowance, personal_income_spouse) {
+
+		var mpf = calculateMPF(personal_income) + calculateMPF(personal_income_spouse);
+
+		document.getElementById("mpf-contribution-" + self_spouse).innerHTML = mpf.toFixed(2);
+
+		var net_chargeable_income = personal_income + personal_income_spouse - mpf - personal_allowance;
+
+		net_chargeable_income = net_chargeable_income < 0 ? 0 : net_chargeable_income;
+
+		document.getElementById("net-chargeable-income-" + self_spouse).innerHTML = net_chargeable_income.toFixed(2);
+
+		// console.log(net_chargeable_income < 0 ? 0 : net_chargeable_income)
+		return net_chargeable_income;
+	}
+
+	function calculateMPF(personal_income) {
+		var monthly_income = personal_income / 12;
+		if (monthly_income < 7100) {
+
+			return 0 * 12
+		} else if (monthly_income <= 30000) {
+
+			return monthly_income * 0.05 * 12
+		}
+		else {
+			return 1500 * 12
+		}
+	}
+
+	function calculateTax(net_chargeable_income, self_spouse_joint) {
+		// console.log(net_chargeable_income);
+
+		var tax = 0;
+		var remaining_income = (net_chargeable_income > 0 ? net_chargeable_income : 0);
+		var income_per_count = 50000;
+		var tax_rate = 0.02;
+
+		// count how many round is needed
+		var cal_count = (remaining_income / 50000 > 4) ? 4 : remaining_income / 50000;
+		console.log(cal_count);
+
+		for (var i = 1; i <= cal_count; i++) {
+
+			tax += income_per_count * tax_rate;
+			remaining_income -= income_per_count;
+			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-' + i + ' .net-chargeable-income').innerHTML = income_per_count;
+			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-' + i + ' .each-step-tax').innerHTML = (income_per_count * tax_rate).toFixed(2);
+			tax_rate += 0.04;
+		}
+			console.log(remaining_income)
+
+		if (cal_count < 4) {
+			tax += remaining_income * tax_rate;
+			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-' + Math.floor(cal_count + 1) + ' .net-chargeable-income').innerHTML = remaining_income.toFixed(2);
+			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-' + Math.floor(cal_count + 1) + ' .each-step-tax').innerHTML = (remaining_income * tax_rate).toFixed(2);
+		} else {
+			console.log('af')
+			tax += remaining_income * 0.17;
+			console.log(remaining_income)
+			console.log(tax);
+			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-5 .net-chargeable-income').innerHTML = remaining_income.toFixed(2);
+			document.querySelector('#result-tax-table-' + self_spouse_joint + ' .step-row-5 .each-step-tax').innerHTML = (remaining_income * tax_rate).toFixed(2);
+		}
+
+		return tax;
+	}
+
+	// Clean input fields data
+	function resetAll() {
+		document.getElementById("input-form-self").reset();
+		document.getElementById("input-form-spouse").reset();
+		$("#final-compared-tax").html("");
+		$(".net-chargeable-income").empty();
+		$(".each-step-tax").empty();
+		$("#final-separated-joint").html("");
+		$(".final-tax-result").css('color', 'black');
+	}
+
+	// Press enter will calculate
+	var input = document.getElementsByTagName("BODY")[0];
+
+	input.addEventListener("keyup", function(event) {
+	  // Number 13 is the "Enter" key on the keyboard
+	  if (event.keyCode === 13) {
+	    // Cancel the default action, if needed
+	    event.preventDefault();
+	    // Trigger the button element with a click
+	    document.getElementById("enter-btn").click();
+	}
+
+	// Enable tooltips everywhere
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+});
+</script>
